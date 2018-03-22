@@ -52,23 +52,25 @@ class App extends Component {
 							input: 'searchbox',
 							list: 'suggestionlist',
 						}}
-						autosuggest={false}
+						autosuggest={true}
 						iconPosition="left"
 						filterLabel="search"
 					/>
 				</div>
 				<div className="display">
 					<div className={`leftSidebar ${this.state.visible ? 'active' : ''}`}>
-						<DateRange
-							dataField="date_from"
-    						componentId="DateRangeSensor"
-    						title="Publicado por usuario"
-    						numberOfMonths={1}
-							queryFormat="basic_date" // yyyyMMdd
-							placeholder={{
-								start: 'Inicio',
-								end: 'Fin'
+						<MultiList
+							componentId="locationFilter"
+							dataField="location.keyword"
+							title="Ubicación"
+							size={1000}
+							showCheckbox={false}
+							className="locations"
+							innerClass={{
+								list: 'location-list',
 							}}
+							placeholder="Delegación"
+							filterLabel="Delegación"
 						/>
 						<SingleRange
 							componentId="ratingsFilter"
@@ -103,16 +105,28 @@ class App extends Component {
 						/>
 						<MultiList
 							componentId="authorFilter"
-							dataField="author.raw"
-							title="Author"
+							dataField="author.keyword"
+							title="Autor"
 							size={1000}
 							showCheckbox={false}
 							className="authors"
 							innerClass={{
 								list: 'author-list',
 							}}
-							placeholder="Filter by author name"
+							placeholder="Por autor"
 							filterLabel="Author"
+						/>
+						<DateRange
+							dataField="published"
+    						componentId="DateRangeSensor"
+    						title="Publicado por usuario"
+    						numberOfMonths={1}
+							queryFormat="basic_date" // yyyyMMdd
+							placeholder={{
+								start: 'Inicio',
+								end: 'Fin'
+							}}
+							filterLabel="Fecha publicado"
 						/>
 					</div>
 					<div className="mainBar">
@@ -134,7 +148,17 @@ class App extends Component {
 								{
 									dataField: 'raiting',
 									sortBy: 'desc',
-									label: 'Ratings (High to low)',
+									label: 'Valoraciones (Altas a bajas)',
+								},
+								{
+									dataField: 'title.keyword',
+									sortBy: 'asc',
+									label: 'Título A->Z',
+								},
+								{
+									dataField: 'title.keyword',
+									sortBy: 'desc',
+									label: 'Título Z->A',
 								}
 							]}
 							onData={res => ({

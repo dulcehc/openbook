@@ -139,7 +139,8 @@ class App extends Component {
 									'mainSearch',
 									'authorFilter',
 									'ratingsFilter',
-									'DateRangeSensor'
+									'DateRangeSensor',
+									'locationFilter'
 								],
 							}}
 							pagination

@@ -9,6 +9,7 @@ import {
 	SingleRange,
 	SelectedFilters,
 	ResultCard,
+	DateRange
 } from '@appbaseio/reactivesearch';
 
 import './App.css';
@@ -58,6 +59,17 @@ class App extends Component {
 				</div>
 				<div className="display">
 					<div className={`leftSidebar ${this.state.visible ? 'active' : ''}`}>
+						<DateRange
+							dataField="date_from"
+    						componentId="DateRangeSensor"
+    						title="Publicado por usuario"
+    						numberOfMonths={1}
+							queryFormat="basic_date" // yyyyMMdd
+							placeholder={{
+								start: 'Inicio',
+								end: 'Fin'
+							}}
+						/>
 						<SingleRange
 							componentId="ratingsFilter"
 							dataField="raiting"
@@ -89,21 +101,6 @@ class App extends Component {
 							}}
 							filterLabel="Ratings"
 						/>
-						<RangeSlider
-							componentId="publishFilter"
-							dataField="original_publication_year"
-							title="Year of Publication"
-							filterLabel="published"
-							range={{
-								start: 1970,
-								end: 2017,
-							}}
-							rangeLabels={{
-								start: '1970',
-								end: '2017',
-							}}
-							interval={2}
-						/>
 						<MultiList
 							componentId="authorFilter"
 							dataField="author.raw"
@@ -127,7 +124,8 @@ class App extends Component {
 								and: [
 									'mainSearch',
 									'authorFilter',
-									'ratingsFilter'
+									'ratingsFilter',
+									'DateRangeSensor'
 								],
 							}}
 							pagination

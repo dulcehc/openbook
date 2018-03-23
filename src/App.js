@@ -1,6 +1,8 @@
 
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import {Icon} from 'react-fa';
+import {ButtonToolbar, DropdownButton, MenuItem, Nav, NavDropdown} from 'react-bootstrap';
 import { Switch, Route } from 'react-router-dom';
 
 import {
@@ -56,6 +58,15 @@ class App extends Component {
 						iconPosition="left"
 						filterLabel="search"
 					/>
+					<div className="user-session">
+						<DropdownButton bsSize="large" title="@dulcehc" id="dropdown-size-large">
+		          <MenuItem eventKey="1">Mi cuenta</MenuItem>
+		          <MenuItem eventKey="2">Mis libros</MenuItem>
+		          <MenuItem eventKey="3">Notificaciones</MenuItem>
+		          <MenuItem divider />
+		          <MenuItem eventKey="4">Otros</MenuItem>
+	        	</DropdownButton>
+					</div>
 				</div>
 				<div className="display">
 					<div className={`leftSidebar ${this.state.visible ? 'active' : ''}`}>

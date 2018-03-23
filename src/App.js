@@ -1,17 +1,17 @@
 
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import { Switch, Route } from 'react-router-dom';
+
 import {
 	ReactiveBase,
 	DataSearch,
 	MultiList,
-	RangeSlider,
 	SingleRange,
 	SelectedFilters,
 	ResultCard,
 	DateRange
 } from '@appbaseio/reactivesearch';
-
 import './App.css';
 
 class App extends Component {
@@ -37,7 +37,7 @@ class App extends Component {
 			>
 				<div className="navbar">
 					<div className="logo">
-						Good<b>Books</b>
+						Open<b>Book</b>
 					</div>
 					<DataSearch
 						className="datasearch"
@@ -166,9 +166,9 @@ class App extends Component {
 								image: res.front,
 								title: res.title || ' ',
 								description:
-									`<div class='result-author' title='${
-										res.author
-									}'>by ${res.user}</div>`
+									`<div class='result-user' title='${
+										res.user
+									}'>por ${res.user}</div>`
 									+ `<span class="star">${'★'.repeat(res.raiting)}</span>`,
 								url: `https://google.com/search?q=${
 									res.title

@@ -1,16 +1,17 @@
 
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import { Switch, Route } from 'react-router-dom';
+
 import {
 	ReactiveBase,
 	DataSearch,
 	MultiList,
-	RangeSlider,
 	SingleRange,
 	SelectedFilters,
 	ResultCard,
+	DateRange
 } from '@appbaseio/reactivesearch';
-
 import './App.css';
 
 class App extends Component {
@@ -31,59 +32,70 @@ class App extends Component {
 	render() {
 		return (
 			<ReactiveBase
-				app="good-books-ds"
-				credentials="nY6NNTZZ6:27b76b9f-18ea-456c-bc5e-3a5263ebc63d"
+				app="openbook"
+				credentials="Tlt67c9PM:4ca76c0c-b1bb-4fd4-a675-68bead959b44"
 			>
 				<div className="navbar">
 					<div className="logo">
-						Good<b>Books</b>
+						Open<b>Book</b>
 					</div>
 					<DataSearch
 						className="datasearch"
 						componentId="mainSearch"
 						dataField={[
-							'original_title',
-							'original_title.search',
-							'authors',
-							'authors.search',
+							'title',
+							'author'
 						]}
 						queryFormat="and"
-						placeholder="Search for a book title or an author"
+						placeholder="Buscar por título o autor"
 						innerClass={{
 							input: 'searchbox',
 							list: 'suggestionlist',
 						}}
-						autosuggest={false}
+						autosuggest={true}
 						iconPosition="left"
 						filterLabel="search"
 					/>
 				</div>
 				<div className="display">
 					<div className={`leftSidebar ${this.state.visible ? 'active' : ''}`}>
+						<MultiList
+							componentId="locationFilter"
+							dataField="location.keyword"
+							title="Ubicación"
+							size={1000}
+							showCheckbox={false}
+							className="locations"
+							innerClass={{
+								list: 'location-list',
+							}}
+							placeholder="Delegación"
+							filterLabel="Delegación"
+						/>
 						<SingleRange
 							componentId="ratingsFilter"
-							dataField="average_rating_rounded"
-							title="Book Ratings"
+							dataField="raiting"
+							title="Valoraciones"
 							data={[
 								{
 									start: 4,
-									end: 5,
-									label: '★★★★ & up',
+									end: 4,
+									label: '★★★★',
 								},
 								{
 									start: 3,
-									end: 5,
-									label: '★★★ & up',
+									end: 3,
+									label: '★★★',
 								},
 								{
 									start: 2,
-									end: 5,
-									label: '★★ & up',
+									end: 2,
+									label: '★★',
 								},
 								{
 									start: 1,
-									end: 5,
-									label: '★ & up',
+									end: 1,
+									label: '★',
 								},
 							]}
 							react={{
@@ -91,77 +103,75 @@ class App extends Component {
 							}}
 							filterLabel="Ratings"
 						/>
-						<RangeSlider
-							componentId="publishFilter"
-							dataField="original_publication_year"
-							title="Year of Publication"
-							filterLabel="published"
-							range={{
-								start: 1970,
-								end: 2017,
-							}}
-							rangeLabels={{
-								start: '1970',
-								end: '2017',
-							}}
-							interval={2}
-						/>
 						<MultiList
 							componentId="authorFilter"
-							dataField="authors.raw"
-							title="Authors"
+							dataField="author.keyword"
+							title="Autor"
 							size={1000}
 							showCheckbox={false}
 							className="authors"
 							innerClass={{
 								list: 'author-list',
 							}}
-							placeholder="Filter by author name"
-							filterLabel="Authors"
+							placeholder="Por autor"
+							filterLabel="Author"
+						/>
+						<DateRange
+							dataField="published"
+    						componentId="DateRangeSensor"
+    						title="Publicado por usuario"
+    						numberOfMonths={1}
+							queryFormat="basic_date" // yyyyMMdd
+							placeholder={{
+								start: 'Inicio',
+								end: 'Fin'
+							}}
+							filterLabel="Fecha publicado"
 						/>
 					</div>
 					<div className="mainBar">
 						<SelectedFilters />
 						<ResultCard
 							componentId="results"
-							dataField="original_title"
+							dataField="title"
 							react={{
 								and: [
 									'mainSearch',
-									'ratingsFilter',
-									'publishFilter',
 									'authorFilter',
+									'ratingsFilter',
+									'DateRangeSensor',
+									'locationFilter'
 								],
 							}}
 							pagination
 							size={12}
 							sortOptions={[
 								{
-									dataField: 'average_rating',
+									dataField: 'raiting',
 									sortBy: 'desc',
-									label: 'Ratings (High to low)',
+									label: 'Valoraciones (Altas a bajas)',
 								},
 								{
-									dataField: 'original_title.raw',
+									dataField: 'title.keyword',
 									sortBy: 'asc',
-									label: 'Title A->Z',
+									label: 'Título A->Z',
 								},
 								{
-									dataField: 'original_title.raw',
+									dataField: 'title.keyword',
 									sortBy: 'desc',
-									label: 'Title Z->A',
-								},
+									label: 'Título Z->A',
+								}
 							]}
 							onData={res => ({
-								image: res.image,
-								title: res.original_title || ' ',
+								image: res.front,
+								title: res.title || ' ',
 								description:
-									`<div class='result-author' title='${
-										res.authors
-									}'>by ${res.authors}</div>`
-									+ `<span class="star">${'★'.repeat(res.average_rating_rounded)}</span>`,
+									`<div class='result-user' title='${
+										res.user
+									}'>por ${res.user}</div>`
+									+ `<span class="star">${'★'.repeat(res.raiting)}</span>`,
 								url: `https://google.com/search?q=${
-									res.original_title
+									res.title
 								}`,
 							})}
 							className="result-data"
